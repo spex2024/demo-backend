@@ -26,24 +26,22 @@ const VERIFY_SITE = "https://api.spexafrica.site";
 const DEV_SITE_URL = "http://localhost:3000"; // or http://localhost:3001
 const DEV_VERIFY_URL = "http://localhost:8080";
 
-const getUrlBasedOnReferer = (req) => {
-    const referer = req.headers.referer || req.headers.origin || '';
-
-    if (referer.includes('localhost')) {
-        return { baseUrl: DEV_SITE_URL, verifyUrl: DEV_VERIFY_URL };
-    } else if (referer.includes('.site')) {
-        return { baseUrl: URL_SITE, verifyUrl: VERIFY_SITE };
-    }
-
-    return { baseUrl: URL_APP, verifyUrl: VERIFY_APP };
-};
+// const getUrlBasedOnReferer = (req) => {
+//     const referer = req.headers.referer || req.headers.origin || '';
+//
+//     if (referer.includes('localhost')) {
+//         return { baseUrl: DEV_SITE_URL, verifyUrl: DEV_VERIFY_URL };
+//     } else if (referer.includes('.site')) {
+//         return { baseUrl: URL_SITE, verifyUrl: VERIFY_SITE };
+//     }
+//
+//     return { baseUrl: URL_APP, verifyUrl: VERIFY_APP };
+// };
 
 
 
 const sendVerificationEmail = async (user, emailToken, req) => {
-    const { verifyUrl } = getUrlBasedOnReferer(req);
-    const url = `${verifyUrl}/api/user/verify/${emailToken}`;
-    console.log(verifyUrl)
+    const url = `${VERIFY_APP}/api/user/verify/${emailToken}`;
     await sendMail({
         to: user.email,
         subject: 'Account Verification',
@@ -56,8 +54,8 @@ const sendVerificationEmail = async (user, emailToken, req) => {
     });
 };
 const sendResetEmail = async (user, resetToken, req) => {
-    const { baseUrl } = getUrlBasedOnReferer(req);
-    const url = `${baseUrl}/reset/password-reset?token=${resetToken}`;
+
+    const url = `${VERIFY_APP}/reset/password-reset?token=${resetToken}`;
 
     await sendMail({
         to: user.email,
@@ -214,7 +212,7 @@ export const verifyEmail = async (req, res) => {
 
         // Check if the user is already verified
         if (user.isVerified) {
-            res.redirect(`${getUrlBasedOnReferer(req).baseUrl}/verify?status=verified`);
+            res.redirect(`${VERIFY_APP}/verify?status=verified`);
         }
 
         // Update user verification status
@@ -264,10 +262,10 @@ export const verifyEmail = async (req, res) => {
         agency.issuedPack +=2
         await agency.save();
         // Redirect on successful verification
-        return res.redirect(`${URL}/verify?status=success`);
+        return res.redirect(`${VERIFY_APP}/verify?status=success`);
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
-            return res.redirect(`${URL}/verify?status=expired`);
+            return res.redirect(`${VERIFY_APP}/verify?status=expired`);
         }
 
         // Log error and send a generic server error response if necessary
