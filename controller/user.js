@@ -212,7 +212,7 @@ export const verifyEmail = async (req, res) => {
 
         // Check if the user is already verified
         if (user.isVerified) {
-            res.redirect(`${VERIFY_APP}/verify?status=verified`);
+            res.redirect(`${URL_APP}/verify?status=verified`);
         }
 
         // Update user verification status
@@ -262,10 +262,10 @@ export const verifyEmail = async (req, res) => {
         agency.issuedPack +=2
         await agency.save();
         // Redirect on successful verification
-        return res.redirect(`${VERIFY_APP}/verify?status=success`);
+        return res.redirect(`${URL_APP}/verify?status=success`);
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
-            return res.redirect(`${VERIFY_APP}/verify?status=expired`);
+            return res.redirect(`${URL_APP}/verify?status=expired`);
         }
 
         // Log error and send a generic server error response if necessary
