@@ -14,10 +14,10 @@ export const authAdmin = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Optional: ensure it's either an admin or vendor
-        if (decoded.role !== 'admin' && decoded.role !== 'vendor') {
-            return res.status(403).json({ message: 'Access denied. Not authorized.' });
-        }
+        // // Optional: ensure it's either an admin or vendor
+        // if (decoded.role !== 'admin' && decoded.role !== 'vendor') {
+        //     return res.status(403).json({ message: 'Access denied. Not authorized.' });
+        // }
 
         req.user = decoded;
         next();
