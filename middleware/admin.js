@@ -2,17 +2,25 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 export const authAdmin = (req, res, next) => {
-    const token = req.cookies.admin || req.headers.authorization?.split(' ')[1]; // Check if token is in cookies or in Authorization header
+    const token =
+        req.cookies.admin ||
+        req.cookies.vendor ||
+        req.headers.authorization?.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Access denied. No token provided.' });
     }
 
     try {
-        // Verify the token using JWT secret
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // Attach decoded payload (e.g., user id) to request object
-        next(); // Proceed to the next middleware/route
+
+        // Optional: ensure it's either an admin or vendor
+        if (decoded.role !== 'admin' && decoded.role !== 'vendor') {
+            return res.status(403).json({ message: 'Access denied. Not authorized.' });
+        }
+
+        req.user = decoded;
+        next();
     } catch (err) {
         return res.status(403).json({ message: 'Invalid or expired token.' });
     }

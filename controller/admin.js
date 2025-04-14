@@ -121,7 +121,7 @@ export const signIn = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const token = generateToken({ id: admin._id }, '1d');
+        const token = generateToken({ id: admin._id , role: 'admin'}, '1d');
 
         const cookieOptions = {
             httpOnly: true,

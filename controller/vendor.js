@@ -343,7 +343,12 @@ export const signIn = async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password.' });
         }
 
-        const payload = { vendor: { id: vendor._id, email: vendor.email } };
+        const payload = {
+            id: vendor._id,
+            email: vendor.email,
+            role: 'vendor'
+        };
+
         const token = generateToken(payload, '1d');
 
         const cookieOptions = {
