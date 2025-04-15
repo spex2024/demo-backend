@@ -74,8 +74,8 @@ export const handlePackRequest = async (req, res) => {
 
             // Decrease the user's active pack number
             if (user.activePack > 0) {
-                user.activePack -= 1;
-                agency.activePack -= 1;
+                user.activePack = Math.max(0, user.activePack - 1);
+                agency.activePack = Math.max(0, agency.activePack - 1);
             }
 
             await user.save();
