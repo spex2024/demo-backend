@@ -11,6 +11,7 @@ export const authenticateVendor = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        console.log('decoded', decoded);
         req.vendor = decoded.vendor;
         next();
     } catch (error) {

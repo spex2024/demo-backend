@@ -381,7 +381,7 @@ export const getCurrentVendor = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const vendor = await Vendor.findById(decoded.vendor._id).populate('meals').populate({
+        const vendor = await Vendor.findById(decoded.vendor.id).populate('meals').populate({
             path:'agencies',
             populate:{
                 path:'users',
